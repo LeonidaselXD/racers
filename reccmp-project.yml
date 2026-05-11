@@ -11,6 +11,7 @@ targets:
       - reccmp/lego-racers-floats.csv
       - reccmp/lego-racers-directshow.csv
       - reccmp/lego-racers-dxguid.csv
+      - reccmp/lego-racers-function-size.csv
   GOLDP:
     filename: GolDP.dll
     source-root:
@@ -18,3 +19,5 @@ targets:
       - GolDP
     hash:
       sha256: 37856363c936c6baeb3bdbed69de182d9ecb92752b36e6db444369117e80fdba
+    data-sources:
+      - reccmp/goldp-function-size.csv
