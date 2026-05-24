@@ -19,10 +19,13 @@
 #include "lilacorbit0x28.h"
 #include "mabmaterialanimation0x14.h"
 #include "menuanimationlist.h"
+#include "opalhaven0xf4.h"
+#include "particle0x18c.h"
 #include "rectangle.h"
 #include "saffronquartz0x2c.h"
 #include "utopianpan0xa4.h"
 #include "whitefalcon0x140.h"
+#include "whitefalconnode0x18.h"
 
 #include <string.h>
 
@@ -44,7 +47,6 @@ DECOMP_SIZE_ASSERT(CrimsonPebbleVisual0x64, 0x64)
 DECOMP_SIZE_ASSERT(CrimsonPebbleText0x70, 0x70)
 DECOMP_SIZE_ASSERT(CrimsonPebbleAnimation0x33c::Entry0x8, 0x08)
 DECOMP_SIZE_ASSERT(CrimsonPebbleAnimation0x33c::Runtime0x44, 0x44)
-DECOMP_SIZE_ASSERT(CrimsonPebbleAnimation0x33c::Particle0x18c, 0x18c)
 DECOMP_SIZE_ASSERT(CrimsonPebbleAnimation0x33c, 0x33c)
 
 // GLOBAL: LEGORACERS 0x004b4ab0
@@ -55,35 +57,6 @@ const LegoFloat g_crimsonPebbleEvent0x30DefaultPan = 0.0f;
 
 // GLOBAL: LEGORACERS 0x004b4ab8
 const LegoFloat g_crimsonPebbleEvent0x30DefaultFrequencyScale = 1.0f;
-
-// STUB: LEGORACERS 0x004893f0
-CrimsonPebbleAnimation0x33c::Particle0x18c::Particle0x18c()
-{
-	STUB(0x004893f0);
-}
-
-// STUB: LEGORACERS 0x00489440
-CrimsonPebbleAnimation0x33c::Particle0x18c::~Particle0x18c()
-{
-	STUB(0x00489440);
-}
-
-// STUB: LEGORACERS 0x004897e0
-void CrimsonPebbleAnimation0x33c::Particle0x18c::FUN_004897e0(LegoU32)
-{
-	STUB(0x004897e0);
-}
-
-// STUB: LEGORACERS 0x00489960
-void CrimsonPebbleAnimation0x33c::Particle0x18c::FUN_00489960(BronzeFalcon0xc8770*)
-{
-	STUB(0x00489960);
-}
-
-// FUNCTION: LEGORACERS 0x004513d0 FOLDED
-void CrimsonPebbleAnimation0x33c::Particle0x18c::FUN_004513d0(BronzeFalcon0xc8770*)
-{
-}
 
 // FUNCTION: LEGORACERS 0x00489970
 CrimsonPebbleAnimation0x33c::Entry0x8::Entry0x8()
@@ -146,6 +119,20 @@ void CrimsonPebbleAnimation0x33c::FUN_00489af0(
 )
 {
 	STUB(0x00489af0);
+}
+
+// STUB: LEGORACERS 0x00489d70
+Particle0x18c** CrimsonPebbleAnimation0x33c::FUN_00489d70(
+	const LegoChar* p_param1,
+	GolVec3* p_param2,
+	GolVec3* p_param3,
+	GolVec3* p_param4
+)
+{
+	GetName(p_param1);
+
+	STUB(0x00489d70);
+	return 0;
 }
 
 // FUNCTION: LEGORACERS 0x00489fa0
@@ -242,6 +229,34 @@ void CrimsonPebbleEvent0x14::VTable0x04(LilacOrbit0x28* p_arg)
 	}
 }
 
+// STUB: LEGORACERS 0x0049fe30
+void CrimsonPebbleEvent0x14::FUN_0049fe30(undefined4 p_param1, GolVec3* p_param2)
+{
+	STUB(0x0049fe30);
+}
+
+// FUNCTION: LEGORACERS 0x0049fec0
+void CrimsonPebbleEvent0x14::FUN_0049fec0(undefined4 p_param1, GolVec3* p_param2, GolVec3* p_param3)
+{
+	m_unk0x0c->VTable0x5c(0);
+	WhiteFalconNode0x18* falconNode = m_unk0x0c->VTable0x58(0);
+
+	GolVec3 vec1;
+	GolVec3 vec2;
+	vec1.m_x = 1.0f;
+	vec1.m_y = 0.0f;
+	vec1.m_z = 0.0f;
+
+	falconNode->FUN_004132a0(p_param1, &vec1, &vec2);
+	m_unk0x0c->VTable0x34(&vec2.m_x, &p_param2->m_x);
+
+	vec1.m_x = 0.0f;
+	vec1.m_y = 0.0f;
+	vec1.m_z = 1.0f;
+	falconNode->FUN_004132a0(p_param1, &vec1, &vec2);
+	m_unk0x0c->VTable0x34(&vec2.m_x, &p_param3->m_x);
+}
+
 // STUB: LEGORACERS 0x0049ff70
 void CrimsonPebbleEvent0x14::ParseCommonToken(
 	GolFileParser* p_parser,
@@ -256,7 +271,7 @@ void CrimsonPebbleEvent0x14::ParseCommonToken(
 	case GolFileParser::e_unknown0x5d:
 		m_unk0x04 = p_owner->FUN_004a3240(name);
 		m_unk0x08 = m_unk0x04;
-		m_unk0x0c = m_unk0x04;
+		m_unk0x0c = static_cast<OpalHaven0xf4*>(m_unk0x04);
 		if (m_unk0x04 == NULL) {
 			LegoChar text[64];
 			::strncpy(text, name, sizeof(GolName));
@@ -632,7 +647,7 @@ void CrimsonPebble0x228::FUN_004a0730(
 // FUNCTION: LEGORACERS 0x004a0bf0
 void CrimsonPebble0x228::Clear()
 {
-	LegoS32 i;
+	LegoU32 i;
 
 	if (m_soundManager) {
 		m_soundManager->RemoveActiveSoundNode(&m_unk0x14);
@@ -2014,17 +2029,17 @@ void CrimsonPebbleEvent0x50::VTable0x04(LilacOrbit0x28* p_arg)
 {
 	if (m_unk0x18 == NULL) {
 		if (m_unk0x0c == NULL) {
-			m_unk0x0c = p_arg;
+			m_unk0x0c = static_cast<OpalHaven0xf4*>(p_arg);
 		}
 
 		VTable0x14();
 	}
 }
 
-// STUB: LEGORACERS 0x004a3db0
+// FUNCTION: LEGORACERS 0x004a3db0
 void CrimsonPebbleEvent0x50::FUN_004a3db0()
 {
-	STUB(0x004a3db0);
+	m_unk0x18 = m_unk0x14->FUN_00489d70(m_unk0x1c, &m_unk0x24, &m_unk0x30, &m_unk0x3c);
 }
 
 // STUB: LEGORACERS 0x004a3dd0
@@ -2034,10 +2049,21 @@ void CrimsonPebbleEvent0x50::VTable0x18()
 	m_unk0x18 = NULL;
 }
 
-// STUB: LEGORACERS 0x004a3df0
+// FUNCTION: LEGORACERS 0x004a3df0
 void CrimsonPebbleEvent0x50::FUN_004a3df0(LegoU32)
 {
-	STUB(0x004a3df0);
+	GolVec3 v0, v1, v2;
+
+	if (m_unk0x18 && (m_unk0x48 & 8) && m_unk0x0c) {
+		CrimsonPebbleEvent0x14::FUN_0049fe30(m_unk0x4c, &v0);
+		FUN_0049fec0(m_unk0x4c, &v1, &v2);
+		if (m_unk0x18[0]) {
+			m_unk0x18[0]->FUN_00489660(&v0);
+		}
+		if (m_unk0x18[0]) {
+			m_unk0x18[0]->FUN_00489540(&v1, &v2);
+		}
+	}
 }
 
 // FUNCTION: LEGORACERS 0x004a3e70
@@ -2261,7 +2287,7 @@ void CrimsonPebbleEvent0x50Derived::VTable0x04(LilacOrbit0x28* p_arg)
 {
 	if (m_unk0x30 == NULL) {
 		if (m_unk0x0c == NULL) {
-			m_unk0x0c = p_arg;
+			m_unk0x0c = static_cast<OpalHaven0xf4*>(p_arg);
 			m_unk0x04 = p_arg;
 		}
 
@@ -2269,11 +2295,14 @@ void CrimsonPebbleEvent0x50Derived::VTable0x04(LilacOrbit0x28* p_arg)
 	}
 }
 
-// STUB: LEGORACERS 0x004a44c0
+// FUNCTION: LEGORACERS 0x004a44c0
 void CrimsonPebbleEvent0x50Derived::VTable0x18()
 {
-	STUB(0x004a44c0);
-	m_unk0x30 = NULL;
+	if (m_unk0x30) {
+		m_unk0x48 &= ~c_flagBit3;
+		m_unk0x14->DestroyStreamingSoundInstance(m_unk0x30);
+		m_unk0x30 = NULL;
+	}
 }
 
 // STUB: LEGORACERS 0x004a44f0
