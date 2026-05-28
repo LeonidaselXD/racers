@@ -179,7 +179,7 @@ void CrimsonPebbleAnimation0x33c::FUN_00489af0(
 }
 
 // STUB: LEGORACERS 0x00489d70
-Particle0x18c** CrimsonPebbleAnimation0x33c::FUN_00489d70(
+WoozyTrade* CrimsonPebbleAnimation0x33c::FUN_00489d70(
 	const LegoChar* p_param1,
 	GolVec3* p_param2,
 	GolVec3* p_param3,
@@ -190,6 +190,17 @@ Particle0x18c** CrimsonPebbleAnimation0x33c::FUN_00489d70(
 
 	STUB(0x00489d70);
 	return 0;
+}
+
+// FUNCTION: LEGORACERS 0x00489f00
+void CrimsonPebbleAnimation0x33c::FUN_00489f00(WoozyTrade* p_param)
+{
+	if (p_param->m_unk0x00) {
+		p_param->m_unk0x00->FUN_004897a0();
+	}
+
+	p_param->m_unk0x00 = NULL;
+	p_param->m_unk0x04 &= ~WoozyTrade::c_flagBit0;
 }
 
 // FUNCTION: LEGORACERS 0x00489fa0
@@ -2189,11 +2200,22 @@ void CrimsonPebbleEvent0x50::Parse(GolFileParser* p_parser, CrimsonPebble0x228* 
 	}
 }
 
-// STUB: LEGORACERS 0x004a3c20
+// FUNCTION: LEGORACERS 0x004a3c20
 void CrimsonPebbleEvent0x50::VTable0x14()
 {
 	if (m_unk0x18 == NULL) {
-		FUN_004a3db0();
+		GolVec3 v1, v2, v3;
+		v1.m_x = 0.0f;
+		v1.m_y = 0.0f;
+		v1.m_z = 0.0f;
+		v2.m_x = 1.0f;
+		v2.m_y = 0.0f;
+		v2.m_z = 0.0f;
+		v3.m_x = 0.0f;
+		v3.m_y = 0.0f;
+		v3.m_z = 1.0f;
+
+		VTable0x10(&v1, &v2, &v3);
 	}
 }
 
@@ -2235,11 +2257,13 @@ void CrimsonPebbleEvent0x50::FUN_004a3db0()
 	m_unk0x18 = m_unk0x14->FUN_00489d70(m_unk0x1c, &m_unk0x24, &m_unk0x30, &m_unk0x3c);
 }
 
-// STUB: LEGORACERS 0x004a3dd0
+// FUNCTION: LEGORACERS 0x004a3dd0
 void CrimsonPebbleEvent0x50::VTable0x18()
 {
-	STUB(0x004a3dd0);
-	m_unk0x18 = NULL;
+	if (m_unk0x18) {
+		m_unk0x14->FUN_00489f00(m_unk0x18);
+		m_unk0x18 = NULL;
+	}
 }
 
 // FUNCTION: LEGORACERS 0x004a3df0
@@ -2250,11 +2274,11 @@ void CrimsonPebbleEvent0x50::FUN_004a3df0(LegoU32)
 	if (m_unk0x18 && (m_unk0x48 & 8) && m_unk0x0c) {
 		CrimsonPebbleEvent0x14::FUN_0049fe30(m_unk0x4c, &v0);
 		FUN_0049fec0(m_unk0x4c, &v1, &v2);
-		if (m_unk0x18[0]) {
-			m_unk0x18[0]->FUN_00489660(&v0);
+		if (m_unk0x18->m_unk0x00) {
+			m_unk0x18->m_unk0x00->FUN_00489660(&v0);
 		}
-		if (m_unk0x18[0]) {
-			m_unk0x18[0]->FUN_00489540(&v1, &v2);
+		if (m_unk0x18->m_unk0x00) {
+			m_unk0x18->m_unk0x00->FUN_00489540(&v1, &v2);
 		}
 	}
 }
