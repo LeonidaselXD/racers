@@ -11,8 +11,8 @@
 #include "menu/widgets/menuselector.h"
 #include "menu/widgets/menutextbutton.h"
 #include "menu/widgets/menutextlabel.h"
+#include "racer/drivercosmetics.h"
 #include "racer/driverheadbuilder.h"
-#include "racer/turquoiseglowcolor.h"
 
 // VTABLE: LEGORACERS 0x004b332c
 // SIZE 0x4774
@@ -63,9 +63,9 @@ protected:
 	MenuTextButton m_unk0x3ce0;             // 0x3ce0
 	MenuTextButton m_unk0x3fd0;             // 0x3fd0
 	MenuTextButton m_unk0x42c0;             // 0x42c0
-	DriverHeadBuilder m_unk0x45b0;          // 0x45b0
+	DriverHeadBuilder m_headBuilder;        // 0x45b0
 	MainMenuModelSlot m_unk0x4600;          // 0x4600
-	TurquoiseGlowColor m_driverColor;       // 0x475c
+	DriverCosmetics m_driverCosmetics;      // 0x475c
 	undefined m_unk0x4761[0x4764 - 0x4761]; // 0x4761
 	LegoU32 m_unk0x4764;                    // 0x4764
 	LegoU16 m_unk0x4768;                    // 0x4768
