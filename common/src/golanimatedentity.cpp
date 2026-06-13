@@ -3,7 +3,7 @@
 #include "cmbmodelpart0x34.h"
 #include "cmbmodelpartdata0x28.h"
 #include "golscenenode.h"
-#include "goltransformbase.h"
+#include "golicoordsys.h"
 #include "mesh/golmodelbase.h"
 
 #include <float.h>
@@ -146,12 +146,12 @@ void GolAnimatedEntity::VTable0x5c(LegoU32 p_index)
 	}
 
 	for (LegoU32 i = 0; i < node->GetCapacity(); i++) {
-		GolTransformBase* orbit = node->VTable0x18(i);
+		GolICoordSys* coordSys = node->VTable0x18(i);
 
 		GolVec3 activePosition;
-		GolQuat activeRotation;
+		GolQuat activeOrientation;
 		GolVec3 queuedPosition;
-		GolQuat queuedRotation;
+		GolQuat queuedOrientation;
 		LegoBool32 hasActivePosition = animationData.InterpolatePosition(
 			&activePosition,
 			modelPart->GetTrack(activeTrackIndex + i),
@@ -159,7 +159,7 @@ void GolAnimatedEntity::VTable0x5c(LegoU32 p_index)
 			activeFrameCount
 		);
 		LegoBool32 hasActiveRotation = animationData.InterpolateRotation(
-			&activeRotation,
+			&activeOrientation,
 			modelPart->GetTrack(activeTrackIndex + i),
 			activeTime,
 			activeFrameCount
@@ -175,7 +175,7 @@ void GolAnimatedEntity::VTable0x5c(LegoU32 p_index)
 				queuedFrameCount
 			);
 			hasQueuedRotation = animationData.InterpolateRotation(
-				&queuedRotation,
+				&queuedOrientation,
 				modelPart->GetTrack(queuedTrackIndex + i),
 				queuedTime,
 				queuedFrameCount
@@ -188,28 +188,28 @@ void GolAnimatedEntity::VTable0x5c(LegoU32 p_index)
 				blendedPosition.m_x = activePosition.m_x + (queuedPosition.m_x - activePosition.m_x) * m_unk0xec;
 				blendedPosition.m_y = activePosition.m_y + (queuedPosition.m_y - activePosition.m_y) * m_unk0xec;
 				blendedPosition.m_z = activePosition.m_z + (queuedPosition.m_z - activePosition.m_z) * m_unk0xec;
-				orbit->SetPosition(&blendedPosition);
+				coordSys->SetPosition(&blendedPosition);
 			}
 			else {
-				orbit->SetPosition(&activePosition);
+				coordSys->SetPosition(&activePosition);
 			}
 		}
 		else if (hasQueuedPosition) {
-			orbit->SetPosition(&queuedPosition);
+			coordSys->SetPosition(&queuedPosition);
 		}
 
 		if (hasActiveRotation) {
 			if (hasQueuedRotation) {
-				GolQuat blendedRotation;
-				GolMath::FUN_1002f890(activeRotation, queuedRotation, m_unk0xec, &blendedRotation);
-				orbit->VTable0x2c(&blendedRotation.m_x);
+				GolQuat blendedOrientation;
+				GolMath::FUN_1002f890(activeOrientation, queuedOrientation, m_unk0xec, &blendedOrientation);
+				coordSys->SetOrientation(&blendedOrientation);
 			}
 			else {
-				orbit->VTable0x2c(&activeRotation.m_x);
+				coordSys->SetOrientation(&activeOrientation);
 			}
 		}
 		else if (hasQueuedRotation) {
-			orbit->VTable0x2c(&queuedRotation.m_x);
+			coordSys->SetOrientation(&queuedOrientation);
 		}
 	}
 }

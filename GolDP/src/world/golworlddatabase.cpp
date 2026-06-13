@@ -3,7 +3,7 @@
 #include "bounds/golboundingshape.h"
 #include "bounds/golboundingvolume.h"
 #include "camera/golcamerabase.h"
-#include "camera/goltransform.h"
+#include "camera/goldpcoordsys.h"
 #include "cmbmodelpart0x34.h"
 #include "golanimatedentity.h"
 #include "golbinparser.h"
@@ -1688,9 +1688,9 @@ void GolWorldDatabase::FUN_1002f210(LegoU32 p_cameraIndex, GolCameraBase* p_lens
 	p_lens->m_fov = camera->GetUnk0x48();
 	p_lens->m_flags |= 2;
 
-	p_lens->m_transform->SetPosition(&camera->m_unk0x1c);
+	p_lens->m_coordSys->SetPosition(&camera->m_unk0x1c);
 	p_lens->m_flags |= 1;
-	p_lens->m_transform->VTable0x24(&camera->m_unk0x28, &camera->m_unk0x34);
+	p_lens->m_coordSys->YZOrthoNormalize(&camera->m_unk0x28, &camera->m_unk0x34);
 	p_lens->m_flags |= 1;
 
 	if (camera->m_unk0x08 >= 0) {

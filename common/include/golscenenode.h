@@ -1,6 +1,7 @@
 #ifndef GOLSCENENODE_H
 #define GOLSCENENODE_H
 
+#include "golicoordsys.h"
 #include "golnametable.h"
 #include "goltxtparser.h"
 
@@ -44,8 +45,8 @@ public:
 	virtual void VTable0x0c() = 0;                                        // vtable+0x0c
 	virtual void VTable0x10(GolSceneNode* p_node);                        // vtable+0x10
 	virtual void VTable0x14(const LegoChar* p_name, LegoBool32 p_binary); // vtable+0x14
-	virtual GolTransformBase* VTable0x18(LegoU32 p_index) const = 0;      // vtable+0x18
-	virtual LegoU32 VTable0x1c(const GolTransformBase&) const;            // vtable+0x1c
+	virtual GolICoordSys* VTable0x18(LegoU32 p_index) const = 0;      // vtable+0x18
+	virtual LegoU32 VTable0x1c(const GolICoordSys&) const;            // vtable+0x1c
 	virtual void VTable0x20(const GolMatrix4& p_m);                       // vtable+0x20
 	virtual void VTable0x24(const GolMatrix34* p_m);                      // vtable+0x24
 	virtual void VTable0x28(undefined4, undefined4);                      // vtable+0x28

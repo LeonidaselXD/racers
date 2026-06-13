@@ -199,8 +199,8 @@ void MenuManager::InitializeInputDispatcher()
 void MenuManager::FUN_0042cde0()
 {
 	GolVec3 position;
+	GolVec3 up;
 	GolVec3 forward;
-	GolVec3 right;
 	GolCamera* lens = m_golExport->VTable0x20();
 
 	lens->m_fov = m_unk0x04.m_context->GetUnk0x0c();
@@ -213,16 +213,16 @@ void MenuManager::FUN_0042cde0()
 	position.m_x = 0.0f;
 	position.m_y = 0.0f;
 	position.m_z = 0.0f;
-	forward.m_x = 0.0f;
+	up.m_x = 0.0f;
+	up.m_y = 0.0f;
+	up.m_z = -1.0f;
+	forward.m_x = 1.0f;
 	forward.m_y = 0.0f;
-	forward.m_z = -1.0f;
-	right.m_x = 1.0f;
-	right.m_y = 0.0f;
-	right.m_z = 0.0f;
+	forward.m_z = 0.0f;
 
-	lens->GetTransform()->SetPosition(&position);
+	lens->GetCoordSys()->SetPosition(&position);
 	lens->m_flags |= GolCamera::c_flagBit0;
-	lens->GetTransform()->VTable0x24(&right, &forward);
+	lens->GetCoordSys()->YZOrthoNormalize(&forward, &up);
 	lens->m_flags |= GolCamera::c_flagBit0;
 	m_renderer->VTable0x20(lens);
 }

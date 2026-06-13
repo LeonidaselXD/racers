@@ -8,7 +8,7 @@
 #include "render/rectangle.h"
 #include "types.h"
 
-class GolTransform;
+class GolDPCoordSys;
 
 class GolAnimatedEntity;
 
@@ -40,7 +40,7 @@ public:
 	void UpdateFromTrackedEntity();
 	const Rect* GetViewport() const { return &m_viewport; }
 
-	GolTransform* m_transform;          // 0x04
+	GolDPCoordSys* m_coordSys;          // 0x04
 	LegoFloat m_fov;                    // 0x08
 	LegoFloat m_aspectRatio;            // 0x0c
 	LegoFloat m_nearClip;               // 0x10

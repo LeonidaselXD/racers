@@ -5,7 +5,7 @@
 #include "golmodelentity.h"
 #include "golscenenode.h"
 #include "golsurfaceformat.h"
-#include "goltransformbase.h"
+#include "golicoordsys.h"
 #include "material/golimagelist.h"
 #include "material/golmateriallibrary.h"
 #include "material/goltexturelist.h"
@@ -768,7 +768,7 @@ void GolRenderDevice::VTable0xa4(GolWorldEntity* p_model)
 		GolVec3 worldRight;
 		GolVec3 worldForward;
 		static_cast<GolModelEntity*>(p_model)->VTable0x5c(result.m_lodIndex);
-		node->VTable0x18(0)->VTable0x20(&worldRight, &worldForward);
+		node->VTable0x18(0)->GetXZAxis(&worldRight, &worldForward);
 		p_model->VTable0x34(worldRight, &localRight);
 		p_model->VTable0x34(worldForward, &localForward);
 	}

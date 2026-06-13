@@ -259,24 +259,24 @@ void MenuSceneView::FUN_00465c00(undefined4 p_elapsedMs)
 		lens->m_fov = value;
 	}
 
-	GolVec3* forward = &m_unk0x90;
-	GolVec3* right = &m_unk0x9c;
-	m_unk0x64->GetTransform()->VTable0x1c(right, forward);
+	GolVec3* up = &m_unk0x90;
+	GolVec3* forward = &m_unk0x9c;
+	m_unk0x64->GetCoordSys()->GetYZAxis(forward, up);
 
 	GolVec3* axis = &m_unk0xa8;
-	LegoFloat axisX = right->m_y;
-	axisX *= forward->m_z;
-	axisX -= forward->m_y * right->m_z;
+	LegoFloat axisX = forward->m_y;
+	axisX *= up->m_z;
+	axisX -= up->m_y * forward->m_z;
 	axis->m_x = axisX;
 
-	LegoFloat axisY = right->m_z;
-	axisY *= forward->m_x;
-	axisY -= right->m_x * forward->m_z;
+	LegoFloat axisY = forward->m_z;
+	axisY *= up->m_x;
+	axisY -= forward->m_x * up->m_z;
 	axis->m_y = axisY;
 
-	LegoFloat axisZ = forward->m_y * right->m_x;
-	LegoFloat side = right->m_y;
-	side *= forward->m_x;
+	LegoFloat axisZ = up->m_y * forward->m_x;
+	LegoFloat side = forward->m_y;
+	side *= up->m_x;
 	axisZ -= side;
 	axis->m_z = axisZ;
 	m_unk0x90.m_x = 0.0f;
@@ -287,16 +287,16 @@ void MenuSceneView::FUN_00465c00(undefined4 p_elapsedMs)
 	GolVec3 rotatedRight;
 	LegoFloat angle = m_unk0xc4;
 	angle *= elapsed;
-	GolMath::FUN_004496a0(right, &rotatedRight, axis, angle);
+	GolMath::FUN_004496a0(forward, &rotatedRight, axis, angle);
 	angle = m_unk0xcc;
 	angle *= elapsed;
-	GolMath::FUN_004496a0(&rotatedRight, right, forward, angle);
+	GolMath::FUN_004496a0(&rotatedRight, forward, up, angle);
 
 	GolVec3 position;
-	m_unk0x64->GetTransform()->GetPosition(&position);
-	LegoFloat forwardDelta = -forward->m_x;
+	m_unk0x64->GetCoordSys()->GetPosition(&position);
+	LegoFloat forwardDelta = -up->m_x;
 	forwardDelta *= m_unk0xb8;
-	LegoFloat rightDelta = -right->m_x;
+	LegoFloat rightDelta = -forward->m_x;
 	rightDelta *= m_unk0xc0;
 	position.m_x += (forwardDelta + rightDelta) * elapsed;
 	GolCamera* lens = m_unk0x64;
@@ -312,11 +312,11 @@ void MenuSceneView::FUN_00465c00(undefined4 p_elapsedMs)
 	forwardDelta = -m_unk0x90.m_z;
 	forwardDelta *= m_unk0xb8;
 	position.m_z += (rightDelta + forwardDelta) * elapsed;
-	lens->GetTransform()->SetPosition(&position);
+	lens->GetCoordSys()->SetPosition(&position);
 
 	lens->m_flags |= GolCamera::c_flagBit0;
 	GolCamera* currentLens = m_unk0x64;
-	currentLens->GetTransform()->VTable0x24(right, forward);
+	currentLens->GetCoordSys()->YZOrthoNormalize(forward, up);
 	currentLens->m_flags |= GolCamera::c_flagBit0;
 }
 

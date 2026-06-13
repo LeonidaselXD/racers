@@ -2,7 +2,7 @@
 
 #include "golbinparser.h"
 #include "golerror.h"
-#include "goltransformbase.h"
+#include "golicoordsys.h"
 
 #include <string.h>
 
@@ -77,21 +77,21 @@ void GolSceneNode::VTable0x10(GolSceneNode* p_node)
 	VTable0x0c();
 
 	for (LegoU32 i = 0; i < m_capacity; i++) {
-		GolTransformBase* sourceOrbit = p_node->VTable0x18(i);
+		GolICoordSys* coordSys = p_node->VTable0x18(i);
 
 		GolName name;
-		p_node->GetNameByValue(sourceOrbit, name);
+		p_node->GetNameByValue(coordSys, name);
 
-		GolTransformBase* destOrbit = VTable0x18(i);
-		AddName(name, destOrbit);
+		GolICoordSys* destCoordSys = VTable0x18(i);
+		AddName(name, destCoordSys);
 
-		if (sourceOrbit->m_unk0x04 != NULL) {
+		if (coordSys->m_parent != NULL) {
 			GolName parentName;
-			p_node->GetNameByValue(sourceOrbit->m_unk0x04, parentName);
-			static_cast<GolTransformBase*>(GetName(parentName))->FUN_1001ceb0(destOrbit);
+			p_node->GetNameByValue(coordSys->m_parent, parentName);
+			static_cast<GolICoordSys*>(GetName(parentName))->SetChild(destCoordSys);
 		}
 
-		destOrbit->VTable0x48(sourceOrbit);
+		destCoordSys->CopyFrom(coordSys);
 	}
 }
 
@@ -127,12 +127,12 @@ void GolSceneNode::FUN_10029c60(GolFileParser* p_parser)
 	VTable0x0c();
 
 	for (LegoU32 i = 0; i < m_capacity; i++) {
-		GolTransformBase* orbit = VTable0x18(i);
+		GolICoordSys* coordSys = VTable0x18(i);
 		GolName name;
 
 		p_parser->AssertNextTokenIs(GolFileParser::e_unknown0x27);
 		::strncpy(name, p_parser->ReadStringWithMaxLength(sizeOfArray(name)), sizeOfArray(name));
-		GolNameTable::AddName(name, orbit);
+		GolNameTable::AddName(name, coordSys);
 		p_parser->ReadLeftCurly();
 
 		GolFileParser::ParserTokenType token;
@@ -141,21 +141,21 @@ void GolSceneNode::FUN_10029c60(GolFileParser* p_parser)
 			case GolFileParser::e_unknown0x2a: {
 				::strncpy(name, p_parser->ReadStringWithMaxLength(sizeOfArray(name)), sizeOfArray(name));
 
-				GolTransformBase* parent = static_cast<GolTransformBase*>(GetName(name));
+				GolICoordSys* parent = static_cast<GolICoordSys*>(GetName(name));
 				if (parent == NULL) {
 					p_parser->HandleUnexpectedToken(GolFileParser::e_invalidString);
 				}
 
-				parent->FUN_1001ceb0(orbit);
+				parent->SetChild(coordSys);
 				break;
 			}
 			case GolFileParser::e_unknown0x29: {
-				LegoFloat values[4];
-				values[0] = p_parser->ReadFloat();
-				values[1] = p_parser->ReadFloat();
-				values[2] = p_parser->ReadFloat();
-				values[3] = p_parser->ReadFloat();
-				orbit->VTable0x2c(values);
+				GolQuat orientation;
+				orientation.m_x = p_parser->ReadFloat();
+				orientation.m_y = p_parser->ReadFloat();
+				orientation.m_z = p_parser->ReadFloat();
+				orientation.m_w = p_parser->ReadFloat();
+				coordSys->SetOrientation(&orientation);
 				break;
 			}
 			case GolFileParser::e_unknown0x28: {
@@ -163,7 +163,7 @@ void GolSceneNode::FUN_10029c60(GolFileParser* p_parser)
 				position.m_x = p_parser->ReadFloat();
 				position.m_y = p_parser->ReadFloat();
 				position.m_z = p_parser->ReadFloat();
-				orbit->SetPosition(&position);
+				coordSys->SetPosition(&position);
 				break;
 			}
 			}
@@ -175,7 +175,7 @@ void GolSceneNode::FUN_10029c60(GolFileParser* p_parser)
 
 // FUNCTION: GOLDP 0x1001d700 FOLDED
 // FUNCTION: LEGORACERS 0x004113b0 FOLDED
-LegoU32 GolSceneNode::VTable0x1c(const GolTransformBase&) const
+LegoU32 GolSceneNode::VTable0x1c(const GolICoordSys&) const
 {
 	return 0;
 }
@@ -210,9 +210,9 @@ void GolSceneNode::FUN_00413230(undefined4 p_param1, GolVec3* p_param2, GolVec3*
 	*p_param3 = *p_param2;
 
 	GolVec3 vec;
-	for (GolTransformBase* current = VTable0x18(p_param1); current != NULL; current = current->m_unk0x04) {
+	for (GolICoordSys* current = VTable0x18(p_param1); current != NULL; current = current->m_parent) {
 		vec = *p_param3;
-		current->VTable0x04(&vec, p_param3);
+		current->LocalToWorld(&vec, p_param3);
 	}
 }
 
@@ -222,8 +222,8 @@ void GolSceneNode::FUN_004132a0(undefined4 p_param1, GolVec3* p_param2, GolVec3*
 	*p_param3 = *p_param2;
 
 	GolVec3 vec;
-	for (GolTransformBase* current = VTable0x18(p_param1); current != NULL; current = current->m_unk0x04) {
+	for (GolICoordSys* current = VTable0x18(p_param1); current != NULL; current = current->m_parent) {
 		vec = *p_param3;
-		current->VTable0x0c(&vec, p_param3);
+		current->LocalToWorldOrient(&vec, p_param3);
 	}
 }

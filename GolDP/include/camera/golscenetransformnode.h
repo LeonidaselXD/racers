@@ -1,12 +1,13 @@
 #ifndef GOLSCENETRANSFORMNODE_H
 #define GOLSCENETRANSFORMNODE_H
 
+#include "camera/goldpcoordsys.h"
 #include "compat.h"
 #include "decomp.h"
 #include "golscenenode.h"
 
-class GolTransformBase;
-class GolTransform;
+class GolICoordSys;
+class GolDPCoordSys;
 class GolD3DRenderDevice;
 struct GolMatrix4;
 
@@ -19,8 +20,8 @@ public:
 
 	void Clear() override;                                                // vtable+0x08
 	void VTable0x0c() override;                                           // vtable+0x0c
-	GolTransformBase* VTable0x18(LegoU32 p_index) const override;         // vtable+0x18
-	LegoU32 VTable0x1c(const GolTransformBase&) const override;           // vtable+0x1c
+	GolICoordSys* VTable0x18(LegoU32 p_index) const override;         // vtable+0x18
+	LegoU32 VTable0x1c(const GolICoordSys&) const override;           // vtable+0x1c
 	void VTable0x20(const GolMatrix4& p_m) override;                      // vtable+0x20
 	void VTable0x24(const GolMatrix34* p_m) override;                     // vtable+0x24
 	void VTable0x2c(LegoU32 p_index, GolMatrix34* p_dest) const override; // vtable+0x2c
@@ -33,7 +34,7 @@ public:
 private:
 	friend class GolD3DRenderDevice;
 
-	GolTransform* m_unk0x18; // 0x18
+	GolDPCoordSys* m_unk0x18; // 0x18
 };
 
 #endif // GOLSCENETRANSFORMNODE_H

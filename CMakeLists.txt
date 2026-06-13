@@ -100,7 +100,7 @@ set(COMMON_SOURCES
   common/src/golmath.cpp
   common/src/golstring.cpp
   common/src/golstringtable.cpp
-  common/src/goltransformbase.cpp
+  common/src/golicoordsys.cpp
   common/src/golscenenode.cpp
   common/src/whitefalcon0x140light.cpp
   common/src/whitefalcon0x140materialcolor.cpp
@@ -189,7 +189,7 @@ add_library(goldp SHARED
   GolDP/src/surface/azureridge0x38.cpp
   GolDP/src/camera/golcamerabase.cpp
   GolDP/src/camera/golcamera.cpp
-  GolDP/src/camera/goltransform.cpp
+  GolDP/src/camera/goldpcoordsys.cpp
   GolDP/src/device/ddrawutil.cpp
   GolDP/src/material/golmateriallibrary.cpp
   GolDP/src/material/amberhaze0x20.cpp

@@ -39,7 +39,7 @@ public:
 	// SYNTHETIC: GOLDP 0x10017a60
 	// GolCamera::`vector deleting destructor'
 
-	GolTransform* GetTransform() { return m_transform; }
+	GolDPCoordSys* GetCoordSys() { return m_coordSys; }
 
 protected:
 	friend class GolD3DRenderDevice;

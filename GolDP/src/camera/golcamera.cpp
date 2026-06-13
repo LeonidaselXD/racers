@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(GolCamera, 0x344)
 // FUNCTION: GOLDP 0x10001ea0
 GolCamera::GolCamera()
 {
-	m_transform = &m_unk0x120.m_unk0x00;
+	m_coordSys = &m_unk0x120.m_unk0x00;
 	m_renderer = NULL;
 }
 

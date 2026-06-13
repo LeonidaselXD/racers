@@ -1,9 +1,9 @@
 #include "camera/golcamerabase.h"
 
-#include "camera/goltransform.h"
+#include "camera/goldpcoordsys.h"
 #include "golanimatedentity.h"
 #include "golscenenode.h"
-#include "goltransformbase.h"
+#include "golicoordsys.h"	
 
 // FUNCTION: LEGORACERS 0x004046a0
 void GolCameraBase::LookAt(GolVec3* p_position, GolVec3* p_target, GolVec3* p_up)
@@ -18,8 +18,8 @@ void GolCameraBase::LookAt(GolVec3* p_position, GolVec3* p_target, GolVec3* p_up
 	up.m_y = -p_up->m_y;
 	up.m_z = -p_up->m_z;
 
-	m_transform->VTable0x24(&forward, &up);
-	m_transform->SetPosition(p_position);
+	m_coordSys->YZOrthoNormalize(&forward, &up);
+	m_coordSys->SetPosition(p_position);
 }
 
 // FUNCTION: LEGORACERS 0x00404740
@@ -45,7 +45,7 @@ void GolCameraBase::UpdateFromTrackedEntity()
 
 	m_trackedEntity->VTable0x5c(0);
 	GolSceneNode* frameSet = m_trackedEntity->VTable0x58(0);
-	GolTransformBase* orbit = frameSet->VTable0x18(m_trackedNodeIndex);
+	GolICoordSys* coordSys = frameSet->VTable0x18(m_trackedNodeIndex);
 
 	GolVec3 position;
 	GolVec3 right;
@@ -53,13 +53,13 @@ void GolCameraBase::UpdateFromTrackedEntity()
 	GolVec3 transformedPosition;
 	GolVec3 transformedRight;
 	GolVec3 transformedForward;
-	orbit->GetPosition(&position);
-	orbit->VTable0x20(&right, &forward);
+	coordSys->GetPosition(&position);
+	coordSys->GetXZAxis(&right, &forward);
 
-	for (GolTransformBase* parent = orbit->m_unk0x04; parent != NULL; parent = parent->m_unk0x04) {
-		parent->VTable0x04(&position, &transformedPosition);
-		parent->VTable0x0c(&right, &transformedRight);
-		parent->VTable0x0c(&forward, &transformedForward);
+	for (GolICoordSys* parent = coordSys->m_parent; parent != NULL; parent = parent->m_parent) {
+		parent->LocalToWorld(&position, &transformedPosition);
+		parent->LocalToWorldOrient(&right, &transformedRight);
+		parent->LocalToWorldOrient(&forward, &transformedForward);
 
 		position = transformedPosition;
 		right = transformedRight;
@@ -70,11 +70,11 @@ void GolCameraBase::UpdateFromTrackedEntity()
 	m_trackedEntity->VTable0x34(right, &transformedRight);
 	m_trackedEntity->VTable0x34(forward, &transformedForward);
 
-	m_transform->SetPosition(&transformedPosition);
+	m_coordSys->SetPosition(&transformedPosition);
 	transformedForward.m_x = -transformedForward.m_x;
 	m_flags |= 1;
 	transformedForward.m_y = -transformedForward.m_y;
 	transformedForward.m_z = -transformedForward.m_z;
-	m_transform->VTable0x24(&transformedRight, &transformedForward);
+	m_coordSys->YZOrthoNormalize(&transformedRight, &transformedForward);
 	m_flags |= 1;
 }

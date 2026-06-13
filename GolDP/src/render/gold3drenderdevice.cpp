@@ -2,7 +2,7 @@
 
 #include "camera/golcamera.h"
 #include "camera/golscenetransformnode.h"
-#include "camera/goltransform.h"
+#include "camera/goldpcoordsys.h"
 #include "font/golfontbase.h"
 #include "golerror.h"
 #include "golmath.h"
@@ -1101,16 +1101,16 @@ void GolD3DRenderDevice::VTable0xb4(GolBillboard& p_param)
 	LegoBool32 visibility[2];
 	p_param.FUN_10029fa0(m_unk0x4c.m_position, visibility);
 	if (visibility[0]) {
+		GolVec3 up;
 		GolVec3 forward;
-		GolVec3 right;
-		GolTransformBase* orbit = m_unk0x0c->m_transform;
-		orbit->VTable0x1c(&right, &forward);
+		GolICoordSys* coordSys = m_unk0x0c->m_coordSys;
+		coordSys->GetYZAxis(&forward, &up);
 
-		forward.m_x = -forward.m_x;
-		forward.m_y = -forward.m_y;
-		forward.m_z = -forward.m_z;
+		up.m_x = -up.m_x;
+		up.m_y = -up.m_y;
+		up.m_z = -up.m_z;
 
-		LegoBool32 builtMatrix = p_param.FUN_10014e50(&right, &forward, &m_unk0xc8410);
+		LegoBool32 builtMatrix = p_param.FUN_10014e50(&forward, &up, &m_unk0xc8410);
 		if (builtMatrix) {
 			GolMath::FUN_1002f3a0(m_unk0xc8410, *m_unk0xc8490, m_unk0xc8498);
 			m_unk0xc8568 = 0;
@@ -1888,7 +1888,7 @@ void GolD3DRenderDevice::FUN_1000ac00(GoldDune0x38* p_texture)
 void GolD3DRenderDevice::FUN_1000acf0(LegoU32 p_index)
 {
 	Field0xc8524* useMatrix = m_unk0xc8524;
-	GolTransform** orbits = &static_cast<GolSceneTransformNode*>(m_unk0xc8520)->m_unk0x18;
+	GolDPCoordSys** orbits = &static_cast<GolSceneTransformNode*>(m_unk0xc8520)->m_unk0x18;
 	GolMatrix4* matrix;
 	if (useMatrix != NULL) {
 		matrix = &(*orbits)[p_index].m_unk0x90;
