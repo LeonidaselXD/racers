@@ -1983,9 +1983,9 @@ void CutscenePlayer::FUN_004a2f80(GolCamera* p_lens)
 	GolVec3 right;
 	GolVec3 forward;
 
-	p_lens->GetTransform()->GetPosition(&position);
-	p_lens->GetTransform()->GetRight(&right);
-	p_lens->GetTransform()->GetForward(&forward);
+	p_lens->GetCoordSys()->GetPosition(&position);
+	p_lens->GetCoordSys()->GetRight(&right);
+	p_lens->GetCoordSys()->GetForward(&forward);
 
 	SoundNode* node = &m_unk0x14;
 
